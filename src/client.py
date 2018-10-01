@@ -26,13 +26,7 @@ def web_client():
     # 获取设备ID和设备识别码
     print('终端启动，进行终端入网验证!')
     ip_mac = get_ip_mac()
-    mac_md5 = hashlib.md5()
-    mac_md5.update(ip_mac['mac'].encode('utf-8'))
-    devID = mac_md5.hexdigest()
-    ip_md5 = hashlib.md5()
-    ip_md5.update(ip_mac['ip'].encode('utf-8'))
-    devIC = ip_md5.hexdigest()
-    dev_data = {'devID': devID, 'devIC': devIC}
+    dev_data = {'devID': ip_mac['mac'], 'devIC': ip_mac['ip']}
     print(dev_data)
 
     # 设置HTTPS
@@ -78,7 +72,7 @@ def web_client():
     # 身份认证成功，进行人机验证
     print('身份认证成功，进行人机验证!')
     user_dev_verify_api = 'https://127.0.0.1:5000/api/dev/user_dev_verify'
-    data = {"devID": devID, "username": "wangjing"}
+    data = {"devID": ip_mac['mac'], "username": "wangjing"}
     r = requests.post(user_dev_verify_api, json=data, verify=ca_file)
     if r.status_code == 200:
         print(r.json())
@@ -174,7 +168,7 @@ def test():
         print('use time', time_end - time_start)
 
 if __name__ == "__main__":
-    #web_client()
+    web_client()
     #performance_test()
     #test_dev_verify_noredis()
-    test_dev_verify()
+    #test_dev_verify()
