@@ -1,0 +1,18 @@
+general:
+  branches:
+    only:
+      - master
+      
+dependencies:
+  pre:
+    - sudo apt-get update; sudo apt-get install openssl libapr1
+      
+machine:
+  java:
+    version: oraclejdk8
+
+deployment:
+  deploysnap:
+    branch: master
+    commands:
+      - mvn deploy -DskipTests -s settings.xml
